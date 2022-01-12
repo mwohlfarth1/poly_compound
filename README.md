@@ -18,3 +18,5 @@ To use the app, run it in some way. The easiest way to do this is to run it from
 5. Clone this repository (or just copy the ```.py```, ```.lock```, and ```.toml``` files to a directory)
 6. Run ```poetry install``` wherever your files are. This will use the ```.lock``` and ```.toml``` files to create a virtual environment and install all the dependencies into that virtual environment. That way they don't clutter up your global python instance.
 7. To run the program, just ask ```poetry``` to run the ```main.py``` script using ```python```: ```poetry run python main.py```
+
+<img src="https://github.com/mwohlfarth1/poly_compound/blob/main/poly_compound_v0.1_demo.gif" width="90%" height="50%"/> 
