@@ -1,5 +1,6 @@
-from typing import Tuple, List
-import sys # for running this app strangely. see G
+from typing import Text, Tuple, List
+import sys
+from PyQt5 import QtWidgets # for running this app strangely. see G
 
 # drawin shit
 from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QPushButton, QMessageBox, QLineEdit)
@@ -155,14 +156,12 @@ class Driver(QWidget):
         self.donation_button = QPushButton('Buy me a beer', self)
         self.donation_button.move(500, 10)
         self.donation_button.clicked.connect(self.on_donation_button_clicked)
-        self.donation_button.show()
 
 
     def create_help_button(self):
         self.help_button = QPushButton('HELP!!!', self)
         self.help_button.move(600, 10)
         self.help_button.clicked.connect(self.on_help_button_clicked)
-        self.help_button.show()
 
 
     def create_input_boxes(self):
@@ -224,9 +223,16 @@ class Driver(QWidget):
     def on_donation_button_clicked(self):
         '''Runs when the Done button is clicked'''
 
-        donation_box = QMessageBox(self)
-        message = """I made this for free. If you feel like buying me a beer, here\'s an address you can send AVAX/TIME/MEMO to: \n\n0xF85CB785F3Aa1eaEF8901E687f54E680F7c082DE"""
-        donation_box.about(self, 'Donate', message)
+        donation_box = QMessageBox()
+        message = """I made this for free. If you feel like buying me a beer, here\'s an address you can send AVAX/TIME/MEMO to: \n\n0xF85CB785F3Aa1eaEF8901E687f54E680F7c082DE\n\n Would you like to copy this address to your clipboard?"""
+        donation_box.setText(message)
+        donation_box.setWindowTitle('Donate')
+        donation_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+        # tell qt to display the box and capture the return value of clicking a button
+        ret = donation_box.exec()
+        if ret == QMessageBox.Yes:
+            clipboard.copy('0xF85CB785F3Aa1eaEF8901E687f54E680F7c082DE')
 
     
     def on_help_button_clicked(self):
@@ -496,7 +502,6 @@ COMMON PROBLEMS:
         return apy_at_point
 
     
-    # TODO: make the calculation correct?
     def calc_rebase_rate_for_apy(self, apy: float):
         '''Calculate the rebase rate for a particular apy.
         '''
