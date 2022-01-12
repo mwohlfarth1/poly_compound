@@ -225,7 +225,7 @@ class Driver(QWidget):
         '''Runs when the Done button is clicked'''
 
         donation_box = QMessageBox(self)
-        message = """Regardless of whether or not you found this tool useful, if you feel like buying me a beer, here\'s an AVAX address you can send monies to: \n\n0x69696969696969696969"""
+        message = """I made this for free. If you feel like buying me a beer, here\'s an address you can send AVAX/TIME/MEMO to: \n\n0xF85CB785F3Aa1eaEF8901E687f54E680F7c082DE"""
         donation_box.about(self, 'Donate', message)
 
     
