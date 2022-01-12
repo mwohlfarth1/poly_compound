@@ -1,25 +1,24 @@
-from typing import Text, Tuple, List
+from typing import Tuple, List
 import sys
-from PyQt5 import QtWidgets # for running this app strangely. see G
 
 # drawin shit
-from PyQt5.QtWidgets import (QApplication, QLabel, QWidget, QPushButton, QMessageBox, QLineEdit)
-from PyQt5.QtGui import QPainter, QPen, QFont
-from PyQt5.QtCore import QLine, Qt
+from PyQt5.QtWidgets import (
+    QApplication, 
+    QLabel, 
+    QWidget, 
+    QPushButton, 
+    QMessageBox, 
+    QLineEdit
+)
+from PyQt5.QtGui import QPainter, QPen
+from PyQt5.QtCore import Qt
 
 # math and shit
 import numpy as np
-from numpy import NaN, ndarray
-import matplotlib.pyplot as plt
-from numpy.lib.polynomial import poly
-import scipy as sp
-import pandas as pd 
+from numpy import ndarray
 
 # copying the clipboard
 import pyperclip as clipboard
-
-# to suppress the RankWarning
-import warnings
 
 # for time
 from datetime import datetime, timedelta
@@ -87,24 +86,15 @@ class Driver(QWidget):
         self.mouse_loc_cart_label.resize(200, 40)
         self.mouse_loc_cart_label.move(5, 200)
 
-        # define a label for me printing things
-        self.my_printer = QLabel(self)
-        self.my_printer.resize(500, 200)
-        self.my_printer.move(5, 120)
-
-        if hasattr(self, 'qt_sucks_big_dick'):
-            self.my_printer.setText('Fuck QT')
-            self.my_printer.setFont(QFont('Arial', 100))
-
         # define a label for printing the polynomial
         self.polynomial_label = QLabel(self)
         self.polynomial_label.resize(1000, 40)
         self.polynomial_label.move(200, self.window_height - 45)
 
         # define another printer
-        self.my_printer2 = QLabel(self)
-        self.my_printer2.resize(200, 40)
-        self.my_printer2.move(10, 270)
+        self.my_printer = QLabel(self)
+        self.my_printer.resize(200, 40)
+        self.my_printer.move(10, 270)
 
         # define a label for putting the final TIME amount
         # TODO: change the name from box to label
@@ -152,7 +142,6 @@ class Driver(QWidget):
     def create_donation_button(self):
         '''You know what this does.'''
 
-        # define a button for people to say when they're done drawing points
         self.donation_button = QPushButton('Buy me a beer', self)
         self.donation_button.move(500, 10)
         self.donation_button.clicked.connect(self.on_donation_button_clicked)
@@ -292,14 +281,14 @@ COMMON PROBLEMS:
         if event.key() == Qt.Key_C and event.modifiers() == Qt.ControlModifier:
             clipboard.copy(self.format_poly(self.calc_cart_polynomial(points)))
 
-            self.my_printer2.setText('Polynomial copied to clipboard')
+            self.my_printer.setText('Polynomial copied to clipboard')
 
         # clear the points if ctrl-z pressed
         if event.key() == Qt.Key_Z and event.modifiers() == Qt.ControlModifier:
             points = []
 
             self.update()
-            self.my_printer2.setText('Points cleared')
+            self.my_printer.setText('Points cleared')
 
 
 # shit that draws stuff #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-
@@ -421,6 +410,8 @@ COMMON PROBLEMS:
 
             # draw the polynomial if we've calculated it        
             for x, y in self.rebase_points:
+                # cut off calculations at pixels 10000 and -10000 since
+                # we can't do calculations with giant numbers
                 if x > 10000:
                     x = 10000 
                 elif x < -10000:
@@ -438,29 +429,6 @@ COMMON PROBLEMS:
 
 
 # calculations related things #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#- 
-    # TODO: remove this function
-    def calc_graph_polynomial(self, points: List[Tuple], degree: int = 7) -> ndarray:
-        '''Given the x's and y's of the points and the degree polynomial
-        requested, return an ndarray of the coefficients for a polynomial
-        which will visually fit the list of points drawn.
-
-        @param points: a list of the points, where each point is a tuple.
-        @param y: a list of the y points
-        @param degree: the degree polynomial that we want to generate.
-                       defaults to 7 because 7 would allow for the final 
-                       inflection to match the initial inflection (it do go 
-                       down now so it do go down then) and 7 is a good numba
-
-                        # NOTE: proof of the above:
-        '''
-
-        # split the tuples into independent lists
-        x = [x for x,y in points]
-        y = [y for x,y in points]
-
-        return np.polyfit(x, y, degree)
-
-    
     def calc_cart_polynomial(self, points: List[Tuple], degree: int = 7) -> ndarray:
         '''Given the x's and y's of the points in the polynomial requested,
         return an ndarray of the coefficients. 
@@ -691,12 +659,13 @@ COMMON PROBLEMS:
 
 
 def main():
+    # wtf does this do? spawn a new thread and run this program in the 
+    # thread and then kill the current thread? why would you do that? 
+    # i don't get paid enough to know that i guess...
     app = QApplication(sys.argv)
     exe = Driver()
     sys.exit(app.exec_())
 
+
 if __name__ == '__main__':
-    # wtf does this do? spawn a new thread and run this program in the 
-    # thread and then kill the current thread? why would you do that? 
-    # i don't get paid enough to know that i guess...
     main()
