@@ -248,8 +248,11 @@ class Driver(QWidget):
         End APY: Enter the end APY in the bottom right box
             Default: 0
 
-        Initial TIME amount: Enter the initial TIME amount in the box in the top middle
+        Initial MEMO amount: Enter the initial MEMO amount in the box in the top middle
             Default: 1.0
+
+        End $TIME Price: Enter the price of TIME/MEMO at the end time
+            Default: 2000.00
 
 USAGE:
         Click and drag to add points to the screen. Those points are used to generate a polynomial which best fits the points. That polynomial is used to calculate the apy and rebase rate for each of the rebases.
